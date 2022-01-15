@@ -14,6 +14,15 @@
     <nav id="navbar-example2" class="navbar navbar-light px-3">
         <a class="navbar-brand" href="#" style="font-family: 'Titan One', cursive; font-size: 60px;">homie.</a>
      </nav>
+     {% with messages = get_flashed_messages() %}
+     {% if messages %}
+       <div class="flashes row">
+       {% for message in messages %}
+         <div class="col-sm-6 mx-auto p-3 mb-3" style="background-color: yellow; border-radius: 5px; filter: drop-shadow(8px 8px 0px #444444);">{{ message }}</div>
+       {% endfor %}
+       </div>
+     {% endif %}
+   {% endwith %}
 <div class="row">
     <div class="col-sm-6 mx-auto p-3" style="background-color: yellow; border-radius: 5px; filter: drop-shadow(8px 8px 0px #444444);">
         <form action="/" method="POST">
@@ -22,7 +31,7 @@
                 <div class="col-sm-8">
                     <select id="state" name="state" class="form-control">
                         {% for abbrev, state in states.items() %}
-                        <option value="{{ abbrev }}">{{ state }}</option>
+                        <option value="{{ abbrev }}"  {% if abbrev == form_dict.get('state', None) %}selected{% endif %}>{{ state }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -30,45 +39,44 @@
             <div class="form-group row">
                 <label for="zipcode" class="col-sm-4">Zipcode</label>
                 <div class="col-sm-8">
-                    <input class="form-control" type="text" name="zipcode" id="zipcode"></input>
+                    <input class="form-control" type="text" name="zipcode" id="zipcode" value="98144"></input>
                 </div>
             </div>
             <div class="form-group row">
-                <label for="home_type" class="col-sm-4">Home Type</label>
+                <label for="homeType" class="col-sm-4">Home Type</label>
                 <div class="col-sm-8">
-            <select id="home_type" name="home_type" class="form-control">
-                <option value="SINGLE_FAMILY">Single Family</option>
-                <option value="CONDO">Condo</option>
-                <option value="TOWN_HOUSE">Townhouse</option>
-                <option value="MULTI_FAMILY">Multi Family</option>
+            <select id="homeType" name="homeType" class="form-control">
+                {% for homeType in ["SINGLE_FAMILY", "CONDO", "TOWNHOUSE", "MULTI_FAMILY"] %}
+                <option value="{{homeType}}" {% if homeType == form_dict.get('homeType', None) %}selected{% endif %}>{{homeType}}</option>
+                {% endfor %}
             </select>
             </div>
             </div>
             <div class="form-group row">
                 <label for="livingArea" class="col-sm-4">Living Area (sqft)</label>
                 <div class="col-sm-8">
-            <input type="text" name="livingArea" id="livingArea" class="form-control" value=0></input>
+            <input type="text" name="livingArea" id="livingArea" class="form-control" value={{ form_dict.get('livingArea', 0) }}></input>
             </div>
             </div>
             <div class="form-group row">
             <label for="bedrooms" class="col-sm-4">Bedrooms</label>
             <div class="col-sm-8">
-            <input type="range" id="bedrooms" name="bedrooms" class="form-control" min="0" max="20" value="0" oninput="this.nextElementSibling.value = this.value">
-            <output>0</output>
+            <input type="range" id="bedrooms" name="bedrooms" class="form-control" min="0" max="20" value="{{ form_dict.get('bedrooms', 0) }}" oninput="this.nextElementSibling.value = this.value">
+            <output>{{ form_dict.get('bedrooms', 0) }}</output>
             </div>
             </div>
             <div class="form-group row">
                 
             <label for="bathrooms" class="col-sm-4">Bathrooms</label>
             <div class="col-sm-8">
-            <input type="range" id="bathrooms" name="bathrooms" class="form-control" min="0" max="20" value="0" oninput="this.nextElementSibling.value = this.value">
-            <output>0</output>
+            <input type="range" id="bathrooms" name="bathrooms" class="form-control" min="0" max="20" value="{{ form_dict.get('bathrooms', 0) }}" oninput="this.nextElementSibling.value = this.value">
+            <output>{{ form_dict.get('bathrooms', 0) }}</output>
             </div>
             </div>
             <div class="form-group row">
                 <label for="lotArea" class="col-sm-4">Lot Area (sqft)</label>
                 <div class="col-sm-8">
-                    <input type="text" name="lotArea" id="lotArea" class="form-control" value=0></input>
+                    <input type="text" name="lotArea" id="lotArea" class="form-control" value={{ form_dict.get('lotArea', 0) }}></input>
             </div>
             </div>
             <div class="form-group row">
