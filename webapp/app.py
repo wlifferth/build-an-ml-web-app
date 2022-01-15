@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, flash
+from predict import predict
 
 import json
 
@@ -15,7 +16,7 @@ def home():
     if request.method == 'POST':
         form_dict = request.form
         try:
-            prediction = int(request.form['livingArea']) * AVERAGE_PRICE_PER_SQUARE_FOOT
+            prediction = predict(request.form)
         except Exception as e:
             print(e)
             flash('We weren\'t able to make a prediction. Maybe check your input and try again?')
